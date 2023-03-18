@@ -1,5 +1,6 @@
 from parser import parser
 import sys
+import math
 
 def pretty_print_matches(matches):
     print(f"Tamaño del matching: {len(matches)}")
@@ -18,9 +19,13 @@ def search_single_match(posible_matches):
     return None
 
 def search_match_least_peers(posible_matches):
-    min_matches = len(posible_matches[0][1])
-    best_match = posible_matches[0]
+    if not posible_matches:
+        return [[], set()]
+    min_matches = math.inf
+    best_match = [[], set()]
     for posible_match in posible_matches:
+        if len(posible_match[1]) == 0:
+            continue
         if len(posible_match[1]) == 1:
             return posible_match
         if len(posible_match[1]) < min_matches:
@@ -41,14 +46,17 @@ def recursive_single_matches(point_match, point, posible_matches, matches, A):
 def iterative_minimum_matches(posible_matches, matches):
     posible_match = search_match_least_peers(posible_matches)
     while len(posible_match[1]) >= 1:
+        posible_matches.remove(posible_match)
         point_match = posible_match[1].pop()
         matches.append((point_match, posible_match[0]))
         for posible_match in posible_matches:
             posible_match[1].discard(point_match)
+        
+        posible_match = search_match_least_peers(posible_matches)
     return matches
 
-def find_max_matching(path):
-    A, B = parser(path)
+def find_max_matching(A, B):
+    
     #supuesto no hay puntos repetidos
     posible_matches = []
     matches = []
@@ -63,11 +71,15 @@ def find_max_matching(path):
         elif len(point_matches) > 1:
             #si tiene mas de un match solo se agrega a la lista de posibles matches
             posible_matches.append((point, point_matches))
-
     matches = iterative_minimum_matches(posible_matches, matches)
-    print(posible_matches)#remove for prod
+    # print(posible_matches)#remove for prod
     return matches
 
-path = sys.argv[1]
-matches = find_max_matching(path)
-pretty_print_matches(matches)
+def main():
+    path = sys.argv[1]
+    A, B = parser(path)
+    matches = find_max_matching(A, B)
+    pretty_print_matches(matches)
+
+if __name__ == "__main__":
+    main()
