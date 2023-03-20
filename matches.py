@@ -1,6 +1,7 @@
 from parser import parser
 import sys
 import math
+from heapq import heappush, heappop, heapify
 
 def pretty_print_matches(matches):
     print(f"Tamaño del matching: {len(matches)}")
@@ -12,67 +13,41 @@ def pretty_print_matches(matches):
 def is_dominant(a, b):
     return a[0] >= b[0] and a[1] >= b[1]
 
-def search_single_match(posible_matches):
-    for posible_match in posible_matches:
-        if len(posible_match[1]) == 1:
-            return posible_match
-    return None
-
-def search_match_least_peers(posible_matches):
-    if not posible_matches:
-        return [[], set()]
-    min_matches = math.inf
-    best_match = [[], set()]
-    for posible_match in posible_matches:
-        if len(posible_match[1]) == 0:
-            continue
-        if len(posible_match[1]) == 1:
-            return posible_match
-        if len(posible_match[1]) < min_matches:
-            min_matches = len(posible_match[1])
-            best_match = posible_match
-    return best_match
-
-def recursive_single_matches(point_match, point, posible_matches, matches, A):
-    matches.append((point_match, point))
-    A.remove(point_match)
-    for posible_match in posible_matches:
-        posible_match[1].discard(point_match)
-    posible_match = search_single_match(posible_matches)
-    if posible_match:
-        matches, posible_matches, A = recursive_single_matches(posible_match[1].pop(), posible_match[0], posible_matches, matches, A)
-    return matches, posible_matches, A
-
-def iterative_minimum_matches(posible_matches, matches):
-    posible_match = search_match_least_peers(posible_matches)
-    while len(posible_match[1]) >= 1:
-        posible_matches.remove(posible_match)
-        point_match = posible_match[1].pop()
-        matches.append((point_match, posible_match[0]))
-        for posible_match in posible_matches:
-            posible_match[1].discard(point_match)
-        
-        posible_match = search_match_least_peers(posible_matches)
-    return matches
-
 def find_max_matching(A, B):
-    
-    #supuesto no hay puntos repetidos
-    posible_matches = []
+    A = sorted(A, key=lambda point: point[0], reverse=True)
+    B = sorted(B, key=lambda point: point[0], reverse=True)
+    A.append((-1, -1)) #truco para que en la ultima iteracion use todos los puntos de B
+
     matches = []
-    for point in B: 
-        point_matches = set()
-        for point2 in A: #busco los matches posibles para point y los agrego a un set
-            if is_dominant(point2, point):
-                point_matches.add(point2)
-        if len(point_matches) == 1: #si hay un solo match, lo agrego a matches y saco ese punto de posible_matches y de A
-            #ademas itero recursivamente para ir agregando todos los puntos que vayan quedando con un solo match
-            matches, posible_matches, A = recursive_single_matches(point_matches.pop(), point, posible_matches, matches, A)
-        elif len(point_matches) > 1:
-            #si tiene mas de un match solo se agrega a la lista de posibles matches
-            posible_matches.append((point, point_matches))
-    matches = iterative_minimum_matches(posible_matches, matches)
-    # print(posible_matches)#remove for prod
+    available_points = [] #heap, ordena en de menor a mayor valores de y
+
+    curr_B_index = 0
+    for i in range(len(A)-1):
+        possible_B = []
+        x_start = A[i][0]
+        x_end = A[i+1][0]
+        heappush(available_points, (A[i][1], A[i]))
+        for point_B in B[curr_B_index:]:
+            if point_B[0] > x_start:
+                curr_B_index += 1
+                continue
+            if point_B[0] <= x_end:
+                break
+            heappush(possible_B, (point_B[1], point_B))
+            curr_B_index += 1
+        used_A = []
+        tuple_B = None
+        while len(available_points) > 0 and (len(possible_B) > 0 or tuple_B is not None):
+            tuple_A = heappop(available_points)
+            if tuple_B is None: #solo saco otro b si en la iteracion anterior se matcheo
+                tuple_B = heappop(possible_B)
+            if tuple_A[0] >= tuple_B[0]:
+                matches.append((tuple_A[1], tuple_B[1]))
+                tuple_B = None
+            else:
+                used_A.append(tuple_A)
+        used_A.extend(available_points) #recupero los puntos de A que no se usaron
+        available_points = used_A
     return matches
 
 def main():

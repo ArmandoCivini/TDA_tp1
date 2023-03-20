@@ -15,11 +15,11 @@ def fuzzer(set_length, iterations):
         A, B = [], []
         for _ in range(set_length):
             #random point in a graph
-            a_point = (random.randint(0, 10), random.randint(0, 10))
-            b_point = (random.randint(0, 10), random.randint(0, 10))
+            a_point = (random.randint(0, 10), random.randint(0, 20))
+            b_point = (random.randint(0, 10), random.randint(0, 20))
             while a_point in A or b_point in B:
-                a_point = (random.randint(0, 10), random.randint(0, 10))
-                b_point = (random.randint(0, 10), random.randint(0, 10))
+                a_point = (random.randint(0, 10), random.randint(0, 20))
+                b_point = (random.randint(0, 10), random.randint(0, 20))
             A.append(a_point)
             B.append(b_point)
 
