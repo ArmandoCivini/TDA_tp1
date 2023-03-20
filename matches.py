@@ -16,7 +16,7 @@ def is_dominant(a, b):
 def find_max_matching(A, B):
     A = sorted(A, key=lambda point: point[0], reverse=True)
     B = sorted(B, key=lambda point: point[0], reverse=True)
-    A.append((-1, -1)) #truco para que en la ultima iteracion use todos los puntos de B
+    A.append((-math.inf, -math.inf)) #truco para que en la ultima iteracion use todos los puntos de B
 
     matches = []
     available_points = [] #heap, ordena en de menor a mayor valores de y

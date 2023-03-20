@@ -48,5 +48,21 @@ class TestMatching(unittest.TestCase):
         A, B = parser('tests/example11.txt')
         self.assertEqual(len(find_max_matching(A, B)), 3)
 
+    def test_full_negative(self):
+        A, B = parser('tests/example12.txt')
+        self.assertEqual(len(find_max_matching(A, B)), 2)
+
+    def test_full_positive_match_negative(self):
+        A, B = parser('tests/example13.txt')
+        self.assertEqual(len(find_max_matching(A, B)), 1)
+
+    def test_full_negative_in_x_positive_in_y(self):
+        A, B = parser('tests/example14.txt')
+        self.assertEqual(len(find_max_matching(A, B)), 1)
+
+    def test_full_positive_in_x_negative_in_y(self):
+        A, B = parser('tests/example14.txt')
+        self.assertEqual(len(find_max_matching(A, B)), 1)
+
 if __name__ == '__main__':
     unittest.main()
