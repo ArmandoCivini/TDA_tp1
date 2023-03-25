@@ -125,4 +125,4 @@ def fuzzer_longer_B(set_length, iterations):
 
 
 if __name__ == "__main__":
-    fuzzer_longer_B(int(sys.argv[1]), int(sys.argv[2]))
+    fuzzer_longer_A(int(sys.argv[1]), int(sys.argv[2]))
