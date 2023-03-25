@@ -38,15 +38,6 @@ def get_all_possible_B(B, x_start, x_end, curr_B_index):
         curr_B_index += 1
     return possible_B, curr_B_index
 
-def get_smallest_less_than_n(heap, n):
-    i = bisect.bisect_right([ item[0] for item in heap], n)
-    print(heap)
-    print(n)
-    print(i)
-    if i < len(heap):
-        return heap[i]
-    return None
-
 def find_max_matching(A, B):
     A, B = sort_sets(A, B) #ordeno por x de mayor a menor
 
