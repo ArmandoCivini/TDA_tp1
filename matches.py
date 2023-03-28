@@ -1,4 +1,4 @@
-from parser import parser
+from parser import parser, parser_internal
 import sys
 import math
 from heapq import heappush, heappop, heapify
@@ -64,11 +64,25 @@ def find_max_matching(A, B):
         
     return matches
 
-def main():
-    path = sys.argv[1]
-    A, B = parser(path)
+def algorithm_with_paths(n, filenameA, filenameB):
+    A, B = parser(filenameA, filenameB)
     matches = find_max_matching(A, B)
     pretty_print_matches(matches)
+
+def main():
+    argc = len(sys.argv)
+    if argc == 2: 
+        path = sys.argv[1]
+        A, B = parser_internal(path)
+        matches = find_max_matching(A, B)
+        pretty_print_matches(matches)
+    elif argc == 4:
+        n = int(sys.argv[1])
+        filenameA = sys.argv[2]
+        filenameB = sys.argv[3]
+        algorithm_with_paths(n, filenameA, filenameB)
+    else:
+        print("invalid amount of arguments")
 
 if __name__ == "__main__":
     main()

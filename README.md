@@ -17,5 +17,10 @@ $ py matches.py [path de ejemplo]
 También se pueden correr multiples ejemplos ya provistos a la vez y comparar sus resultados a la solución óptima mediante los tests.
 
 ```
-py test.py
+$ py tests.py
+```
+
+Finalmente si se quiere correr el algoritmo con el formato de archivos especificado por la catedra se puede hacer de la siguiente manera
+```
+$ py matches.py [n] [A.txt] [B.txt]
 ```
