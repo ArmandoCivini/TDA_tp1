@@ -3,6 +3,7 @@ from matches import find_max_matching, pretty_print_matches, is_dominant
 from itertools import permutations
 import sys
 
+
 def remove_invalid_matches(matches):
     new_matches = []
     for match in matches:
@@ -10,25 +11,27 @@ def remove_invalid_matches(matches):
             new_matches.append(match)
     return new_matches
 
+
 def fuzzer_longer_A(set_length, iterations):
     for _ in range(iterations):
         A, B = [], []
-        for _ in range(random.randint(set_length,set_length)):
-            #random point in a graph
+        for _ in range(random.randint(set_length, set_length)):
+            # random point in a graph
             a_point = (random.randint(-10, 10), random.randint(-10, 10))
             while a_point in A:
                 a_point = (random.randint(-10, 10), random.randint(-10, 10))
             A.append(a_point)
 
         for _ in range(random.randint(1, set_length)):
-            #random point in a graph
+            # random point in a graph
             b_point = (random.randint(-10, 10), random.randint(-10, 10))
             while b_point in B:
                 b_point = (random.randint(-10, 10), random.randint(-10, 10))
             B.append(b_point)
 
-        #consigo todos los matcheos posibles https://www.geeksforgeeks.org/python-program-to-get-all-unique-combinations-of-two-lists/
-        #no importa si son validos o no
+        # consigo todos los matcheos posibles
+        # https://www.geeksforgeeks.org/python-program-to-get-all-unique-combinations-of-two-lists/
+        # no importa si son validos o no
         unique_combinations = []
         permut = permutations(A, len(B))
         for comb in permut:
@@ -53,15 +56,16 @@ def fuzzer_longer_A(set_length, iterations):
             print(f"A: {A}")
             print(f"B: {B}")
             print("")
-            print(f"TRUE match:")
+            print("TRUE match:")
             pretty_print_matches(maximum_match)
             print("")
-            print(f"my result:")
+            print("my result:")
             pretty_print_matches(my_matches)
             return
     print("Every random test  generated passed")
     print("OK")
     return
+
 
 def reverse_matches(matches):
     new_matches = []
@@ -69,25 +73,27 @@ def reverse_matches(matches):
         new_matches.append((match[1], match[0]))
     return new_matches
 
+
 def fuzzer_longer_B(set_length, iterations):
     for _ in range(iterations):
         A, B = [], []
-        for _ in range(random.randint(1,set_length)):
-            #random point in a graph
+        for _ in range(random.randint(1, set_length)):
+            # random point in a graph
             a_point = (random.randint(-10, 10), random.randint(-10, 10))
             while a_point in A:
                 a_point = (random.randint(-10, 10), random.randint(-10, 10))
             A.append(a_point)
 
         for _ in range(random.randint(set_length, set_length)):
-            #random point in a graph
+            # random point in a graph
             b_point = (random.randint(-10, 10), random.randint(-10, 10))
             while b_point in B:
                 b_point = (random.randint(-10, 10), random.randint(-10, 10))
             B.append(b_point)
 
-        #consigo todos los matcheos posibles https://www.geeksforgeeks.org/python-program-to-get-all-unique-combinations-of-two-lists/
-        #no importa si son validos o no
+        # consigo todos los matcheos posibles
+        # https://www.geeksforgeeks.org/python-program-to-get-all-unique-combinations-of-two-lists/
+        # no importa si son validos o no
         unique_combinations = []
         permut = permutations(B, len(A))
         for comb in permut:
@@ -113,10 +119,10 @@ def fuzzer_longer_B(set_length, iterations):
             print(f"A: {A}")
             print(f"B: {B}")
             print("")
-            print(f"TRUE match:")
+            print("TRUE match:")
             pretty_print_matches(maximum_match)
             print("")
-            print(f"my result:")
+            print("my result:")
             pretty_print_matches(my_matches)
             return
     print("Every random test  generated passed")
